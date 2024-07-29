@@ -147,3 +147,27 @@ resource "aws_sns_topic_subscription" "email_PO_subscription" {
   endpoint               = var.sns-po-endpoint
   endpoint_auto_confirms = true
 }
+
+resource "aws_budgets_budget" "monthly_cost_budget" {
+  count = var.budget-threshold > 0 ? 1 : 0 // deploy the resource, only if budget-threshold is greater than 0
+
+  name         = "MonthlyCostBudget"
+  budget_type  = "COST"
+  limit_amount = var.budget-threshold
+  limit_unit   = "USD"
+  time_unit    = "MONTHLY"
+
+  cost_types {
+    include_tax          = true
+    include_subscription = true
+    use_blended          = false
+  }
+
+  notification {
+    comparison_operator        = "GREATER_THAN"
+    notification_type          = "ACTUAL"
+    threshold                  = 80.0
+    threshold_type             = "PERCENTAGE"
+    subscriber_email_addresses = [var.sns-endpoint]
+  }
+}
