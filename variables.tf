@@ -64,3 +64,9 @@ variable "calculation-type" {
   description = "The lambda calculation type"
   type        = string
 }
+
+variable "budget-threshold" {
+  default     = 0
+  description = "The budget threshold"
+  type        = number
+}
