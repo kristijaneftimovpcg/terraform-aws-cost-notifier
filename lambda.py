@@ -36,8 +36,9 @@ def lambda_handler(event, context):
             Granularity='MONTHLY',
             Metrics=['UnblendedCost'], 
         )   
-
-        total_actual_cost = float(actual_cost['ResultsByTime'][0]['Total']['UnblendedCost']['Amount'])
+        total_actual_cost = 0
+        for cost in actual_cost['ResultsByTime']:
+            total_actual_cost += float(cost['Total']['UnblendedCost']['Amount'])
         return round(total_actual_cost, 2)
     
     #Function to get the forecast dates for the current month
