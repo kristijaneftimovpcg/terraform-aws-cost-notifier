@@ -7,7 +7,6 @@ Terraform module to calculate the daily, weekly or monthly cost in AWS, and gene
 
 ```hcl
 module "cost_notifier" {
-  source           = "https://github.com/kristijaneftimovpcg/aws-cost-notifier"
   project-name     = "projectName"
   calculation-type = "monthly" //   # daily, weekly, monthly are the options
   cron-expression  = "cron(0 7 ? * MON *)" // 9:00AM every Monday
