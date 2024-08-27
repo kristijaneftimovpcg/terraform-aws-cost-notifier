@@ -41,7 +41,7 @@ variable "sns-topic-name" {
 
 variable "sns-endpoint" {
   description = "The sns endpoint"
-  type        = string
+  type        = list(string)
 }
 
 variable "sns-po-endpoint" {

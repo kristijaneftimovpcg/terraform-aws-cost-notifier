@@ -134,9 +134,11 @@ resource "aws_sns_topic_policy" "cost_calculation" {
 }
 
 resource "aws_sns_topic_subscription" "email_subscription" {
+  for_each               = toset(var.sns-endpoint)
+
   topic_arn              = aws_sns_topic.budget_notifications.arn
   protocol               = var.sns-protocol
-  endpoint               = var.sns-endpoint
+  endpoint               = each.value
   endpoint_auto_confirms = true
 }
 
@@ -168,6 +170,6 @@ resource "aws_budgets_budget" "monthly_cost_budget" {
     notification_type          = "ACTUAL"
     threshold                  = 80.0
     threshold_type             = "PERCENTAGE"
-    subscriber_email_addresses = [var.sns-endpoint]
+    subscriber_email_addresses = var.sns-endpoint
   }
 }
