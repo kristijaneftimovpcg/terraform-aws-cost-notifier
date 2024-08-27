@@ -11,7 +11,7 @@ module "cost_notifier" {
   calculation-type = "monthly" //   # daily, weekly, monthly are the options
   cron-expression  = "cron(0 7 ? * MON *)" // 9:00AM every Monday
   aws-region       = "eu-central-1"
-  sns-endpoint     = "email-me@gmail.com"
+  sns-endpoint     = ["email-me@gmail.com", "email-me-2@gmail.com"]
   budget-threshold  = 100 // the sns-endpoint will be notified if cost reaches 80% of this value (Optional)
 }
 ```
@@ -24,7 +24,7 @@ module "cost_notifier" {
 | project-name                    | string                           |  `Not Set` |  The name of the project. _Required_.                                                                              |
 | calculation-type                    | string                      |  `Not Set`     |  The type of costs we need (daily, weekly, monthly are the options - detailed description below) . _Required_                                                                            |
 | aws-region     | string                           |  `Not Set` |  The AWS region. _Required_              |
-| sns-endpoint                  | string                           |  `Not Set` |  The email for SNS subscription. _Required_. |
+| sns-endpoint                  | list(string)                           |  `Not Set` | List of emails for SNS subscription. _Required_. |
 | budget-threshold                 | number                          |  `Not Set` |  The budget for the current month. _Optional_.|
 
 <h3> -Daily calculates the cost for the previous day </h3>
