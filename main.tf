@@ -153,7 +153,7 @@ resource "aws_sns_topic_subscription" "email_PO_subscription" {
 resource "aws_budgets_budget" "monthly_cost_budget" {
   count = var.budget-threshold > 0 ? 1 : 0 // deploy the resource, only if budget-threshold is greater than 0
 
-  name         = "MonthlyCostBudget for client: ${var.project-name}"
+  name         = "MonthlyCostBudget-${var.project-name}"
   budget_type  = "COST"
   limit_amount = var.budget-threshold
   limit_unit   = "USD"
