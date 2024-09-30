@@ -48,6 +48,9 @@ def lambda_handler(event, context):
         next_month = start_date.replace(day=28) + datetime.timedelta(days=4)  # Move to the next month
         end_date = next_month.replace(day=1) - datetime.timedelta(days=1)  # Last day of the current month
         
+        if start_date == end_date:
+            end_date = end_date + datetime.timedelta(days=1)
+        
         return start_date, end_date
 
     #Function to get the forecast cost for the current month
