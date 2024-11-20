@@ -1,6 +1,6 @@
 # terraform-aws-cost-notifier
 
-A Terraform module that calculates the daily, weekly, monthly, or annual costs for AWS services and generates a cost forecast(planned cost) for the current month.
+### A Terraform module that calculates the daily, weekly, monthly, or annual costs for AWS services and generates a cost forecast(planned cost) for the current month.
 
 ## Usage
 
