@@ -8,11 +8,11 @@ Terraform module to calculate the daily, weekly or monthly cost in AWS, and gene
 ```hcl
 module "cost_notifier" {
   project-name     = "projectName"
-  calculation-type = "monthly" //   # daily, weekly, monthly are the options
+  calculation-type = "monthly" //   # daily, weekly, monthly, annual are the options
   cron-expression  = "cron(0 7 ? * MON *)" // 9:00AM every Monday
   aws-region       = "eu-central-1"
   sns-endpoint     = ["email-me@gmail.com", "email-me-2@gmail.com"]
-  budget-threshold  = 100 // the sns-endpoint will be notified if cost reaches 80% of this value (Optional)
+  budget-threshold  = 100 // By setting up this value, Budgets will be created in AWS, and alarm will be configured to monitor and notify based on predefined thresholds. The sns-endpoint will be notified(alerted) if cost reaches 80% of this value.
 }
 ```
 
@@ -30,3 +30,4 @@ module "cost_notifier" {
 <h3> -Daily calculates the cost for the previous day </h3>
 <h3> -Monthly calculates the cost for the current month, up until today </h3>
 <h3> -Weekly calculates the cost for the previous week </h3>
+<h3> -Annual calculates the cost for the current year, up until today</h3>
