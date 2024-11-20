@@ -1,7 +1,6 @@
 # terraform-aws-cost-notifier
 
-Terraform module to calculate the daily, weekly or monthly cost in AWS, and generates the forecast cost for the current month.
-
+A Terraform module that calculates the daily, weekly, monthly, or annual costs for AWS services and generates a cost forecast(planned cost) for the current month.
 
 ## Usage
 
@@ -17,9 +16,7 @@ module "cost_notifier" {
 ```
 
 
-## Budget notifications note
-<h3> *By configuring a 'budget-threshold', Budgets will be created in AWS, and an alarm will be set up to monitor and notify based on predefined thresholds. The SNS endpoint(s) will be alerted if costs reach 80% of the threshold value.</h3>
-<br/>
+### Budgets note - By configuring a 'budget-threshold', Budgets will be created in AWS, and an alarm will be set up to monitor and notify based on predefined thresholds. The SNS endpoint(s) will be alerted if costs reach 80% of the threshold value.
 
 
 ## Module Input Variables
@@ -28,10 +25,10 @@ module "cost_notifier" {
 | ----------------------- | -------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------- |
 | cron-expression     | string                           |  `Not Set` |  The CloudWatch Schedule Expression to trigger the Lambda. _Required_.                |
 | project-name                    | string                           |  `Not Set` |  The name of the project. _Required_.                                                                              |
-| calculation-type                    | string                      |  `Not Set`     |  The type of costs we need (daily, weekly, monthly are the options - detailed description below) . _Required_                                                                            |
+| calculation-type                    | string                      |  `Not Set`     |  The type of costs we need (daily, weekly, monthly, annual are the options - detailed description below) . _Required_                                                                            |
 | aws-region     | string                           |  `Not Set` |  The AWS region. _Required_              |
 | sns-endpoint                  | list(string)                           |  `Not Set` | List of emails for SNS subscription. _Required_. |
-| budget-threshold                 | number                          |  `Not Set` |  The budget for the current month. _Optional_.|
+| budget-threshold                 | number                          |  `Not Set` |  The budget threshold for the current month (detailed description above). _Optional_.|
 
 <h3> -Daily calculates the cost for the previous day </h3>
 <h3> -Monthly calculates the cost for the current month, up until today </h3>
