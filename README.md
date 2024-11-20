@@ -12,9 +12,15 @@ module "cost_notifier" {
   cron-expression  = "cron(0 7 ? * MON *)" // 9:00AM every Monday
   aws-region       = "eu-central-1"
   sns-endpoint     = ["email-me@gmail.com", "email-me-2@gmail.com"]
-  budget-threshold  = 100 // By setting up this value, Budgets will be created in AWS, and alarm will be configured to monitor and notify based on predefined thresholds. The sns-endpoint will be notified(alerted) if cost reaches 80% of this value.
+  budget-threshold  = 100 // By setting this variable to a value greater than 0, Budgets will be created in AWS, and an alarm will be set up to monitor and notify based on predefined thresholds. The SNS endpoint(s) will be alerted if costs reach 80% of the threshold value.
 }
 ```
+
+
+## Budget notifications note
+<h3> *By configuring a 'budget-threshold', Budgets will be created in AWS, and an alarm will be set up to monitor and notify based on predefined thresholds. The SNS endpoint(s) will be alerted if costs reach 80% of the threshold value.</h3>
+<br/>
+
 
 ## Module Input Variables
 
