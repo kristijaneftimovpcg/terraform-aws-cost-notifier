@@ -37,7 +37,15 @@ def lambda_handler(event, context):
                 'End': end_date.strftime('%Y-%m-%d')
             },
             Granularity='MONTHLY',
-            Metrics=['UnblendedCost'], 
+            Metrics=['UnblendedCost'],
+            Filter={
+                'Not': {
+                    'Dimensions': {
+                        'Key': 'RECORD_TYPE',
+                        'Values': ['Credit']
+                    }
+                }
+            }
         )   
         total_actual_cost = 0
         for cost in actual_cost['ResultsByTime']:
@@ -65,7 +73,15 @@ def lambda_handler(event, context):
                     'End': end_date.strftime('%Y-%m-%d')
                 },
                 Granularity='MONTHLY',
-                Metric='UNBLENDED_COST', 
+                Metric='UNBLENDED_COST',
+                Filter={
+                    'Not': {
+                        'Dimensions': {
+                            'Key': 'RECORD_TYPE',
+                            'Values': ['Credit']
+                        }
+                    }
+                }
             )
             
             total_forecast_cost = float(forecast_cost['ForecastResultsByTime'][0]['MeanValue'])
