@@ -62,7 +62,7 @@ resource "aws_cloudwatch_event_rule" "cost_trigger" {
 }
 
 resource "aws_cloudwatch_event_target" "lambda_target" {
-  rule      = "${aws_cloudwatch_event_rule.cost_trigger.name}-${var.project-name}"
+  rule      = aws_cloudwatch_event_rule.cost_trigger.name
   target_id = "invoke-lambda"
   arn       = aws_lambda_function.budget_calculation.arn
 }
