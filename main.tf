@@ -8,7 +8,7 @@ data "aws_caller_identity" "current" {}
 
 resource "aws_lambda_function" "budget_calculation" {
   filename         = data.archive_file.lambda.output_path
-  function_name    = var.lambda-name
+  function_name    = "${var.lambda-name}-${var.project-name}"
   source_code_hash = data.archive_file.lambda.output_base64sha256
   role             = aws_iam_role.lambda_role.arn
   handler          = "lambda.lambda_handler"
@@ -28,7 +28,7 @@ resource "aws_lambda_function" "budget_calculation" {
 }
 
 resource "aws_iam_role" "lambda_role" {
-  name = var.lambda-role-name
+  name = "${var.lambda-role-name}-${var.project-name}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -44,20 +44,25 @@ resource "aws_iam_role" "lambda_role" {
   })
 }
 
-resource "aws_iam_policy_attachment" "lambda_policy_attachment" {
-  name       = "lambda-cloudwatch-policy-attachment"
-  roles      = [aws_iam_role.lambda_role.name]
+resource "aws_iam_role_policy_attachment" "role_policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  role       = aws_iam_role.lambda_role.name
 }
 
+# resource "aws_iam_policy_attachment" "lambda_policy_attachment" {
+#   name       = "lambda-cloudwatch-policy-attachment"
+#   roles      = [aws_iam_role.lambda_role.name]
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+# }
+
 resource "aws_cloudwatch_event_rule" "cost_trigger" {
-  name                = var.cloudwatch-rule-name
+  name                = "${var.cloudwatch-rule-name}-${var.project-name}"
   schedule_expression = var.cron-expression
   depends_on          = [aws_lambda_function.budget_calculation]
 }
 
 resource "aws_cloudwatch_event_target" "lambda_target" {
-  rule      = aws_cloudwatch_event_rule.cost_trigger.name
+  rule      = "${aws_cloudwatch_event_rule.cost_trigger.name}-${var.project-name}"
   target_id = "invoke-lambda"
   arn       = aws_lambda_function.budget_calculation.arn
 }
@@ -84,7 +89,7 @@ data "aws_iam_policy_document" "lambda_access_document" {
 }
 
 resource "aws_iam_policy" "lambda_access_policy" {
-  name        = "lambda-access"
+  name        = "lambda-access-${var.project-name}"
   path        = "/"
   description = "IAM policy for setting permissions for Lambda"
   policy      = data.aws_iam_policy_document.lambda_access_document.json
@@ -98,8 +103,8 @@ resource "aws_iam_role_policy_attachment" "lambda_access_attachment" {
 }
 
 resource "aws_sns_topic" "budget_notifications" {
-  name         = var.sns-topic-name
-  display_name = var.sns-topic-name
+  name         = "${var.sns-topic-name}-${var.project-name}"
+  display_name = "${var.sns-topic-name}-${var.project-name}"
 }
 
 data "aws_iam_policy_document" "sns_permissions" {
@@ -134,7 +139,7 @@ resource "aws_sns_topic_policy" "cost_calculation" {
 }
 
 resource "aws_sns_topic_subscription" "email_subscription" {
-  for_each               = toset(var.sns-endpoint)
+  for_each = toset(var.sns-endpoint)
 
   topic_arn              = aws_sns_topic.budget_notifications.arn
   protocol               = var.sns-protocol
